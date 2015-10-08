@@ -27,18 +27,14 @@ var logSet = function (req, res, next) {
     });
 };
 
+var err = new Error('404');
+
 router.post('/login', function (req, res) {
     console.log(req.body);
-    if (req.session.logined) {
-        res.json({
-            log: '이미 로그인 되어있습니다.'
-        });
-    } else {
     user.find({ id: req.body.id }, function (err, docs) {
         if (docs.length == 0) {
-            res.json({
-                log: '존재하지 않는 아이디입니다'
-            });
+            err = new Error('304');
+            err.status = 304;
         } else {
             if (docs[0].pw == req.body.pw) {
                 req.session.logined = true;
@@ -50,13 +46,11 @@ router.post('/login', function (req, res) {
                     
                 });
             } else {
-                res.json({
-                    log: '비밀번호가 잘못되었습니다.'
-                });
+                err = new Error('404');
+                err.status = 404;
             }
         }
     });
-    }
 });
 
 router.post('/logout', logSet, function (req, res) {
@@ -80,14 +74,12 @@ router.post('/signup', function (req, res) {
                     log: '회원가입에 성공하였습니다'
                 });
             } else {
-                res.json({
-                    log: '비밀번호를 확인해주세요'
-                });
+                err = new Error('403');
+                err.status = 403;
             }
         } else {
-            res.json({
-                log: '이미 사용중인 이메일입니다.'
-            });
+            err = new Error('304');
+                err.status = 304;
         }
     });
 });
