@@ -1,0 +1,19 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <title>
+            <%= title %>
+        </title>
+    </head>
+    <body>
+        <form action="/users/login" method="post">
+            <fieldset>
+                <legend><h1><%= title %></h1></legend>
+                E-mail : <input type="email" name="email" placeholder="email" required><br>
+                Password : <input type="password" name="passwd" placeholder="password" required><br>
+                <input type="submit" value="Log in"></input>
+            </fieldset>
+        </form>
+    </body>
+</html>
