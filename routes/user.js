@@ -4,56 +4,33 @@ module.exports = router;
 
 //db setting
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/test');
+mongoose.connect('mongodb://localhost/users');
 
-var user;
-
-var db = mongoose.connection;
-
-db.once('open', function () {
-    var userSchema = mongoose.Schema({
-        id: String,
-        pw: String
-    });
-    
-    user  = mongoose.model('user', userSchema);
+var userSchema = mongoose.Schema({
+    id: {type: String},
+    pw: {type: String}
 });
-
-var logSet = function (req, res, next) {
-    req.session.regenerate(function(){
-        req.session.logined = false;
-        req.session.logId = '';
-        next();
-    });
-};
-
-var err = new Error('404');
+    
+var user  = mongoose.model('user', userSchema);
 
 router.post('/login', function (req, res) {
-    console.log(req.body);
     user.find({ id: req.body.id }, function (err, docs) {
         if (docs.length == 0) {
-            err = new Error('304');
-            err.status = 304;
+            res.send(304);
         } else {
             if (docs[0].pw == req.body.pw) {
-                req.session.logined = true;
-                req.session.logId = docs._id;
                 res.json({
-                    id: docs.id,
-                    pw: docs[0].pw,
-                    _id: docs._id
-                    
+                    log: '로그인 되었습니다.'
                 });
+                console.log(req.body);
             } else {
-                err = new Error('404');
-                err.status = 404;
+                res.send(404);
             }
         }
     });
 });
 
-router.post('/logout', logSet, function (req, res) {
+router.post('/logout', function (req, res) {
     res.json({
         log: '로그아웃 되었습니다.'
     });
@@ -70,16 +47,15 @@ router.post('/signup', function (req, res) {
                 });
                 
                 User.save();
+                console.log(req.body);
                 res.json({
                     log: '회원가입에 성공하였습니다'
                 });
             } else {
-                err = new Error('403');
-                err.status = 403;
+                res.send(403);
             }
         } else {
-            err = new Error('304');
-                err.status = 304;
+                res.send(304);
         }
     });
 });

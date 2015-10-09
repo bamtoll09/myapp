@@ -10,6 +10,7 @@ var routes = require('./routes');
 var index = require('./routes/index');
 var user = require('./routes/user');
 var test = require('./routes/test');
+var hospital = require('./routes/hospital');
 //var chat = require('./routes/chat');
 var tweeter = require('./routes/tweeter');
 var blog = require('./routes/blog');
@@ -39,6 +40,7 @@ app.use(session({
 app.use('/', index);
 app.use('/user', user);
 app.use('/test', test);
+app.ues('/hospital', hospital);
 //app.use('/chat', chat);
 app.use('/tweeter', tweeter);
 app.use('/blog', blog);
