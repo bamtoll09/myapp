@@ -5,15 +5,15 @@ module.exports = router;
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/hospitals');
 
+var revSchema = new Schema({ text: { type: String }});
+
 var hospitalSchema = mongoose.Schema({
     name: { type: String },
     lat: { type: String },
     long: { type: String },
     address: { type: String },
     tel: { type: String },
-    rev[0].text: { type: String },
-    rev[1].text: { type: String },
-    rev[2].text: { type: String }
+    rev: [revSchema]
 });
     
 var hospital  = mongoose.model('hospital', hospitalSchema);
